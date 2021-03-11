@@ -16,7 +16,6 @@ timer2 = QTimer() #页面重置计时器
 
 class MainUI: 
     def __init__(self):
-        
         #页面1：打开时的主界面
         self.s0 = QWidget()
         self.ui0 = scene0.Ui_Form()

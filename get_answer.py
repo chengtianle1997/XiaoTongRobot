@@ -5,6 +5,7 @@ import base64
 import json
 import random
 import string
+import get_location
 
 # -------------- 错误信息 ------------------ #
 # code :999   网络超时
@@ -25,8 +26,10 @@ class TuringRobot:
         # self.AUTH_ID = "70e323b8cf9c1a5ce4970e6f14e45ce1"
         self.AUTH_ID = ''.join(random.sample(string.ascii_letters+string.digits, 32)).lower()
         # 地理位置信息，需根据ip或定位获取
-        self.LAT = "39.938838"
-        self.LNG = "116.368624"
+        # self.LAT = "39.938838"
+        # self.LNG = "116.368624"
+        self.LNG, self.LAT = get_location.GetLocationByIP()
+        self.LNG, self.LAT = str(self.LNG), str(self.LAT)
     
     # 请求头建立
     def buildHeader(self):
