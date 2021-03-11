@@ -27,6 +27,7 @@ class robot_recorder():
 
     # 主功能函数：开始录音 （开启自动停止）
     def record(self):
+        self.stop_sign = False
         p = pyaudio.PyAudio()
         stream = p.open(format=self.FORMAT, channels=self.CHANNELS, 
         rate=self.RATE, input=True, frames_per_buffer=self.CHUNK)
