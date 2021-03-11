@@ -101,21 +101,21 @@ class MainUI:
     def On_pushButton_release(self):
         timer.stop()
 
-    #关闭程序
+    # 关闭程序
     def Destroy(self):
         self.s0.close()
         self.s1.close()
         self.s2.close()
 
-    #重启程序
+    # 重启程序
     def Restart(self):
         print("重启成功")
 
-    #保存配置文件
+    # 保存配置文件
     def SaveConfig(self):
         print("保存成功")
 
-    #点击对话按钮事件   
+    # 点击对话按钮事件   
     def StartTalk(self):
         self.talk_thread = get_talk.GetTalkThread(self.getTalk)
         self.talk_thread.questionSignal.connect(self.ShowTheQuestion)
@@ -123,15 +123,15 @@ class MainUI:
         self.talk_thread.statusSignal.connect(self.GetTheStatus)
         self.talk_thread.start()
 
-    #展示回答
+    # 展示回答
     def ShowTheAnswer(self,txt):
         self.ui1.textBrowser.setText(txt)
 
-    #展示问题
+    # 展示问题
     def ShowTheQuestion(self,txt):
         self.ui1.textBrowser_2.setText(txt)
 
-    #接受状态
+    # 接受状态
     def GetTheStatus(self, status):
         print(status)
 
