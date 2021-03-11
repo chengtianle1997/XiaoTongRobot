@@ -29,22 +29,22 @@ class MainUI:
         self.ui0.pushButton.pressed.connect(self.On_pushButton_pressed)
         self.ui0.pushButton.released.connect(self.On_pushButton_release)
         self.s0.showFullScreen()
-        #页面2：对话窗口界面
+        # 页面2：对话窗口界面
         self.s1 = QWidget()
         self.ui1 = scene1.Ui_Form()
         self.ui1.setupUi(self.s1)
-        #页面2信号与槽
+        # 页面2信号与槽
         self.ui1.pushButton_2.pressed.connect(self.On_pushButton_pressed)
         self.ui1.pushButton_2.released.connect(self.On_pushButton_release)
         self.ui1.label_3.button_clicked_signal.connect(self.StartTalk)
         self.s1.hide()
-        #管理员界面
+        # 管理员界面
         self.s2 = QWidget()
         self.ui2 = scene2.Ui_Form()
         self.ui2.setupUi(self.s2)
         self.ui2.pushButton_2.clicked.connect(self.Destroy)
         self.s2.hide()
-        #修改配置界面
+        # 修改配置界面
         self.s3 = QWidget()
         self.ui3 = scene3.Ui_Form()
         self.ui3.setupUi(self.s3)
@@ -52,7 +52,7 @@ class MainUI:
         self.ui3.pushButton_2.clicked.connect(self.s3.hide)
         self.ui2.pushButton_3.clicked.connect(self.s3.show)
         self.s3.hide()
-        #导航导览界面
+        # 导航导览界面
         self.s4 = QWidget()
         self.ui4 = scene4.Ui_Form()
         self.ui4.setupUi(self.s4)
