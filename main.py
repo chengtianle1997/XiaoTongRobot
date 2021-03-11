@@ -29,22 +29,22 @@ class MainUI:
         self.ui0.pushButton.pressed.connect(self.On_pushButton_pressed)
         self.ui0.pushButton.released.connect(self.On_pushButton_release)
         self.s0.showFullScreen()
-        # 页面2：对话窗口界面
+        #页面2：对话窗口界面
         self.s1 = QWidget()
         self.ui1 = scene1.Ui_Form()
         self.ui1.setupUi(self.s1)
-        # 页面2信号与槽
+        #页面2信号与槽
         self.ui1.pushButton_2.pressed.connect(self.On_pushButton_pressed)
         self.ui1.pushButton_2.released.connect(self.On_pushButton_release)
         self.ui1.label_3.button_clicked_signal.connect(self.StartTalk)
         self.s1.hide()
-        # 管理员界面
+        #管理员界面
         self.s2 = QWidget()
         self.ui2 = scene2.Ui_Form()
         self.ui2.setupUi(self.s2)
         self.ui2.pushButton_2.clicked.connect(self.Destroy)
         self.s2.hide()
-        # 修改配置界面
+        #修改配置界面
         self.s3 = QWidget()
         self.ui3 = scene3.Ui_Form()
         self.ui3.setupUi(self.s3)
@@ -52,7 +52,7 @@ class MainUI:
         self.ui3.pushButton_2.clicked.connect(self.s3.hide)
         self.ui2.pushButton_3.clicked.connect(self.s3.show)
         self.s3.hide()
-        # 导航导览界面
+        #导航导览界面
         self.s4 = QWidget()
         self.ui4 = scene4.Ui_Form()
         self.ui4.setupUi(self.s4)
@@ -60,6 +60,8 @@ class MainUI:
         self.s4.hide()
         # 导入getTalk
         self.getTalk = None
+        # status状态信号
+        self.status = "finished"
         
     # 绑定GetTalk
     def bindGetTalk(self, getTalk):
@@ -67,15 +69,15 @@ class MainUI:
     
     #鼠标任意按下触发事件
     def OnAnywhereChicked(self):
-        self.s0.hide()
         self.s1.showFullScreen()
+        self.s0.hide()
         timer2.timeout.connect(self.RefreshPage)
         timer2.start(30000)
 
     #页面重置事件   
     def RefreshPage(self):
-        self.s1.hide()
         self.s0.showFullScreen()
+        self.s1.hide()
         timer2.stop()
 
     #显示地图界面
@@ -101,39 +103,46 @@ class MainUI:
     def On_pushButton_release(self):
         timer.stop()
 
-    # 关闭程序
+    #关闭程序
     def Destroy(self):
         self.s0.close()
         self.s1.close()
         self.s2.close()
 
-    # 重启程序
+    #重启程序
     def Restart(self):
         print("重启成功")
 
-    # 保存配置文件
+    #保存配置文件
     def SaveConfig(self):
         print("保存成功")
 
-    # 点击对话按钮事件   
+    #点击对话按钮事件   
     def StartTalk(self):
-        self.talk_thread = get_talk.GetTalkThread(self.getTalk)
-        self.talk_thread.questionSignal.connect(self.ShowTheQuestion)
-        self.talk_thread.answerSignal.connect(self.ShowTheAnswer)
-        self.talk_thread.statusSignal.connect(self.GetTheStatus)
-        self.talk_thread.start()
+        if self.status == "recording":
+            self.getTalk.Stop()
+            print("trigger stop")
+        elif self.status == "finished":
+            self.talk_thread = get_talk.GetTalkThread(self.getTalk)
+            self.talk_thread.questionSignal.connect(self.ShowTheQuestion)
+            self.talk_thread.answerSignal.connect(self.ShowTheAnswer)
+            self.talk_thread.statusSignal.connect(self.GetTheStatus)
+            self.talk_thread.start()
+        else:
+            return
 
-    # 展示回答
+    #展示回答
     def ShowTheAnswer(self,txt):
         self.ui1.textBrowser.setText(txt)
 
-    # 展示问题
+    #展示问题
     def ShowTheQuestion(self,txt):
         self.ui1.textBrowser_2.setText(txt)
 
-    # 接受状态
+    #接受状态
     def GetTheStatus(self, status):
         print(status)
+        self.status = status
 
 
 #主运行函数
