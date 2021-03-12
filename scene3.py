@@ -10,6 +10,20 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+#自定义带按键功能的lineEdit
+class MyLineEdit(QtWidgets.QLineEdit):
+    # 自定义信号, 注意信号必须为类属性
+    button_clicked_signal = QtCore.pyqtSignal()
+
+    def __init__(self, parent=None):
+        super(MyLineEdit, self).__init__(parent)
+
+    def mouseReleaseEvent(self, QMouseEvent):
+        self.button_clicked_signal.emit()
+        
+    # 可在外部与槽函数连接
+    def connect_customized_slot(self, func):
+        self.button_clicked_signal.connect(func)
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -20,7 +34,7 @@ class Ui_Form(object):
         self.label = QtWidgets.QLabel(Form)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
-        self.lineEdit = QtWidgets.QLineEdit(Form)
+        self.lineEdit = MyLineEdit(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -31,7 +45,7 @@ class Ui_Form(object):
         self.label_2 = QtWidgets.QLabel(Form)
         self.label_2.setObjectName("label_2")
         self.gridLayout.addWidget(self.label_2, 1, 0, 1, 1)
-        self.lineEdit_2 = QtWidgets.QLineEdit(Form)
+        self.lineEdit_2 = MyLineEdit(Form)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)

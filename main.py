@@ -1,16 +1,22 @@
-import sys
+import sys, os
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtCore import QTimer, QThread
 from PyQt5 import QtGui, QtCore
 
+#页面窗口
 import scene0 #初始页面s0
 import scene1 #显示对话窗口的页面s1
 import scene2 #管理员窗口s2
 import scene3 #修改配置界面s3
 import scene4 #导航导览页面s4
+import reboot #确认重启提醒窗口
 
+#语音功能
 import get_talk
 import config
+
+#软键盘
+from keyBoard import KeyBoard
 
 #全局变量
 timer = QTimer()  #按钮长按计时器
@@ -53,6 +59,7 @@ class MainUI:
         self.ui2 = scene2.Ui_Form()
         self.ui2.setupUi(self.s2)
         self.ui2.pushButton_2.clicked.connect(self.Destroy)
+        self.ui2.pushButton.clicked.connect(self.ShowReboot)
         self.s2.hide()
         #修改配置界面
         self.s3 = QWidget()
@@ -70,10 +77,27 @@ class MainUI:
         self.ui4.setupUi(self.s4)
         self.ui4.pushButton.clicked.connect(self.BackToMain)
         self.s4.hide()
+        # 确认重启提醒窗口
+        self.s5 = QWidget()
+        self.ui5 = reboot.Ui_Form()
+        self.ui5.setupUi(self.s5)
+        self.ui5.pushButton.clicked.connect(self.RebootCancel)
+        self.ui5.pushButton_2.clicked.connect(self.RebootConfirm)
+        self.s5.hide()
         # 导入getTalk
         self.getTalk = None
         # status状态信号
         self.status = "finished"
+        #建立小键盘
+        self.keyboard1 = KeyBoard()
+        self.keyboard1.hide()
+        self.keyboard1.signalShowText.connect(self.SpotidReciveKeyBoard)
+        self.keyboard2 = KeyBoard()
+        self.keyboard2.hide()
+        self.keyboard2.signalShowText.connect(self.RobotidReciveKeyBoard)
+        self.ui3.lineEdit.button_clicked_signal.connect(self.KeyBoard1Event)
+        self.ui3.lineEdit_2.button_clicked_signal.connect(self.KeyBoard2Event)
+
         
     # 绑定GetTalk
     def bindGetTalk(self, getTalk):
@@ -134,6 +158,16 @@ class MainUI:
         self.ui3.lineEdit.setText(spotid)
         self.ui3.lineEdit_2.setText(robotid)
 
+    def ShowReboot(self):
+        self.s5.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
+        self.s5.show()
+
+    def RebootCancel(self):
+        self.s5.hide()
+
+    def RebootConfirm(self):
+        os.system("chmod 777 ./reboot.sh && ./reboot.sh")
+
     #关闭程序
     def Destroy(self):
         self.s0.close()
@@ -180,6 +214,22 @@ class MainUI:
     def GetTheStatus(self, status):
         print(status)
         self.status = status
+
+    #显示小键盘
+    def KeyBoard1Event(self):
+        self.keyboard1.show()
+        self.keyboard2.hide()
+
+    def KeyBoard2Event(self):
+        self.keyboard2.show()
+        self.keyboard1.hide()
+
+    #接收键盘返回的文字
+    def SpotidReciveKeyBoard(self,str):
+        self.ui3.lineEdit.setText(str)
+
+    def RobotidReciveKeyBoard(self,str):
+        self.ui3.lineEdit_2.setText(str)
 
 
 #主运行函数
