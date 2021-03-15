@@ -78,8 +78,16 @@ class GetTalk:
                 self.internalerr_sound()
             if self.debugger:
                 print("voice to txt error: code-{}, errmsg-{}".format(code, error_msg))
+            self.set_status(self.status[2])
             return
         # 问题转回答
+        # 空问题处理
+        if txt == '':
+            self.internalerr_sound()
+            if self.debugger:
+                print("voice to txt error: get an empty input text")
+            self.set_status(self.status[2])
+            return
         code, answer = self.get_answer.get_answer(txt)
         self.set_answer_txt(answer)
         # 错误处理
@@ -90,6 +98,7 @@ class GetTalk:
                 self.internalerr_sound()
             if self.debugger:
                 print("get answer error: code-{}".format(code))
+            self.set_status(self.status[2])
             return
         # 文字转语音
         code, error_msg = self.txt_to_voice.convert(answer)
@@ -103,6 +112,7 @@ class GetTalk:
                 self.internalerr_sound()
             if self.debugger:
                 print("txt to voice eror: code-{}, errmsg-{}".format(code, error_msg))
+            self.set_status(self.status[2])
             return
         # 播放语音
         self.speaker.play("answer.mp3")
