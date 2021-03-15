@@ -2,6 +2,7 @@ import sys, os
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtCore import QTimer, QThread
 from PyQt5 import QtGui, QtCore
+from PyQt5.Qt import *
 
 #页面窗口
 import scene0 #初始页面s0
@@ -22,7 +23,7 @@ from keyBoard import KeyBoard
 timer = QTimer()  #按钮长按计时器
 timer2 = QTimer() #页面重置计时器 
 
-class MainUI: 
+class MainUI(): 
     def __init__(self):
         #读取Config文件
         spotid=config.get_spot_id()
@@ -88,6 +89,8 @@ class MainUI:
         self.getTalk = None
         # status状态信号
         self.status = "finished"
+        #对话框动画状态切换符号 0表示初始状态 1表示运动过一次 再次运动时切换为0
+        self.moveFlag = 0
         #建立小键盘
         self.keyboard1 = KeyBoard()
         self.keyboard1.hide()
@@ -205,6 +208,7 @@ class MainUI:
     #展示回答
     def ShowTheAnswer(self,txt):
         self.ui1.textBrowser.setText(txt)
+        #self.Animation()
 
     #展示问题
     def ShowTheQuestion(self,txt):
@@ -230,6 +234,22 @@ class MainUI:
 
     def RobotidReciveKeyBoard(self,str):
         self.ui3.lineEdit_2.setText(str)
+
+    def Animation(self):
+        if(self.moveFlag == 0):
+            animation = QPropertyAnimation(self.ui1.textBrowser, b'pos',self.s1)
+            # 2.设置属性值： 开始 插值 结束
+            animation.setStartValue(QPoint(0,0))  # 设置起始点
+            animation.setEndValue((QPoint(300, 300)))  # 设置终点
+            # 3.动画时长
+            animation.setDuration(3000)  # 时长单位毫秒
+            # 4.启东动画
+            animation.start()
+            self.moveFlag = 1
+        elif():
+            print("1")
+
+
 
 
 #主运行函数
