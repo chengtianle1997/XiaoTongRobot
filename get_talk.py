@@ -45,6 +45,8 @@ class GetTalk:
             self.InitAutoReply()
         # 状态表
         self.status = ["recording", "solving", "finished"]
+        # 当前状态
+        self.status_now = "finished"
         # 信号绑定
         self.question_signal = None
         self.answer_signal = None
@@ -101,6 +103,7 @@ class GetTalk:
             self.set_status(self.status[2])
             return
         # 文字转语音
+        answer += "。"
         code, error_msg = self.txt_to_voice.convert(answer)
         # 错误处理
         if not code == 0:
@@ -122,6 +125,9 @@ class GetTalk:
     def Stop(self):
         if self.recording:
             self.recorder.stop()
+        elif self.status_now == self.status[1]:
+            self.speaker.stop()
+            self.set_status(self.status[2])
         return
 
     # 检查并加载预设定语音
@@ -148,28 +154,50 @@ class GetTalk:
             interr_txt = config.get_config("autoreply", "internalerror" + str(i))
             # 生成预置语音文件
             self.txt_to_voice.convert(interr_txt, interr_file)
+        # 加载唤醒音
+        wakeup_file = self.audiodir + "wakeup.mp3"
+        wakeup_txt = config.get_config("autoreply", "wakeup")
+        self.txt_to_voice.convert(wakeup_txt, wakeup_file)
 
     # 播放欢迎音
     def welcome_sound(self):
         file_url = self.audiodir + "welcome.mp3"
-        _thread.start_new_thread(self.speaker.play, (file_url,))
+        welcome_txt = config.get_config("autoreply", "welcome")
+        self.set_answer_txt(welcome_txt)
+        # _thread.start_new_thread(self.speaker.play, (file_url,))
+        self.speaker.play(file_url)
 
     # 播放命令提示音
     def instruct_sound(self):
         file_url = self.audiodir + "instruction.mp3"
-        _thread.start_new_thread(self.speaker.play, (file_url,))
+        instr_txt = config.get_config("autoreply", "instruction")
+        self.set_answer_txt(instr_txt)
+        # _thread.start_new_thread(self.speaker.play, (file_url,))
+        self.speaker.play(file_url)
 
     # 播放网络错误提示音
     def networkerr_sound(self):
         n = random.randint(1, 3)
         file_url = self.audiodir + "networkerr" + str(n) + ".mp3"
-        _thread.start_new_thread(self.speaker.play, (file_url,))
+        neterr_txt = config.get_config("autoreply", "networkerror" + str(n))
+        self.set_answer_txt(neterr_txt)
+        # _thread.start_new_thread(self.speaker.play, (file_url,))
+        self.speaker.play(file_url)
     
     # 播放内部错误提示音
     def internalerr_sound(self):
         n = random.randint(1, 3)
         file_url = self.audiodir + "internalerr" + str(n) + ".mp3"
-        _thread.start_new_thread(self.speaker.play, (file_url,))
+        interr_txt = config.get_config("autoreply", "internalerror" + str(n))
+        self.set_answer_txt(interr_txt)
+        # _thread.start_new_thread(self.speaker.play, (file_url,))
+        self.speaker.play(file_url)
+
+    # 播放唤醒音
+    def wakeup_sound(self):
+        file_url = self.audiodir + "wakeup.mp3"
+        # _thread.start_new_thread(self.speaker.play, (file_url,))
+        self.speaker.play(file_url)
 
     # 设定问题文字
     def set_question_txt(self, question_txt):
@@ -189,6 +217,7 @@ class GetTalk:
 
     # 设定当前状态
     def set_status(self, status):
+        self.status_now = status
         if self.debugger:
             print("status:{}".format(status))
         if self.question_signal == None:
@@ -197,6 +226,7 @@ class GetTalk:
 
 # Test Demo (No Signal Version)
 if __name__ == '__main__':
+    
     # 获取实例
     getTalk = GetTalk(init_enable=False, debugger=True)
     # 开始聊天
@@ -207,3 +237,12 @@ if __name__ == '__main__':
     # time.sleep(2)
     # getTalk.Stop()
     print("测试结束")
+    
+    '''
+    # 测试提示音
+    # 获取实例（使能初始化选项）
+    getTalk = GetTalk(init_enable=True, debugger=True)
+    getTalk.wakeup_sound()
+    time.sleep(4)
+    print("测试结束")
+    '''

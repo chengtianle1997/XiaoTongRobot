@@ -69,7 +69,8 @@ class TuringRobot:
         except requests.exceptions.RequestException:
             # 内部错误代码999, 网络超时
             return 999, "网络超时啦，稍等一下再试一次吧"
-
+        except Exception:
+            return 888
 
 # Test Demo
 if __name__ == "__main__":

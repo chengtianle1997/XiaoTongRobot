@@ -100,6 +100,8 @@ class MainUI():
         self.keyboard2.signalShowText.connect(self.RobotidReciveKeyBoard)
         self.ui3.lineEdit.button_clicked_signal.connect(self.KeyBoard1Event)
         self.ui3.lineEdit_2.button_clicked_signal.connect(self.KeyBoard2Event)
+        # 聊天线程
+        self.talk_thread = None
 
         
     # 绑定GetTalk
@@ -195,7 +197,7 @@ class MainUI():
     def StartTalk(self):
         if self.status == "recording":
             self.getTalk.Stop()
-            print("trigger stop")
+            print("trigger stop when recording")
         elif self.status == "finished":
             self.talk_thread = get_talk.GetTalkThread(self.getTalk)
             self.talk_thread.questionSignal.connect(self.ShowTheQuestion)
@@ -204,6 +206,10 @@ class MainUI():
             self.talk_thread.start()
         else:
             return
+        # elif self.status == "solving":
+        #     self.getTalk.Stop()
+        #     print("trigger stop when solving")
+        #     return
 
     #展示回答
     def ShowTheAnswer(self,txt):
@@ -218,6 +224,11 @@ class MainUI():
     def GetTheStatus(self, status):
         print(status)
         self.status = status
+        if status == "finished":
+            try:
+                self.talk_thread.quit()
+            except Exception:
+                return
 
     #显示小键盘
     def KeyBoard1Event(self):
