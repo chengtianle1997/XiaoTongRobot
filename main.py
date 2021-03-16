@@ -1,7 +1,7 @@
 import sys, os
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtCore import QTimer, QThread
-from PyQt5 import QtGui, QtCore
+from PyQt5 import QtGui, QtCore, QtWidgets
 from PyQt5.Qt import *
 
 #页面窗口
@@ -41,7 +41,7 @@ class MainUI():
         self.ui0.label.button_clicked_signal.connect(self.OnAnywhereChicked)
         self.ui0.textBrowser.button_clicked_signal.connect(self.OnAnywhereChicked)
         self.ui0.pushButton_2.clicked.connect(self.OnAnywhereChicked)
-        self.ui0.pushButton_3.clicked.connect(self.ShowMap)
+        # self.ui0.pushButton_3.clicked.connect(self.ShowMap)
         self.ui0.pushButton.pressed.connect(self.On_pushButton_pressed)
         self.ui0.pushButton.released.connect(self.On_pushButton_release)
         self.s0.showFullScreen()
@@ -73,11 +73,11 @@ class MainUI():
         self.ui3.lineEdit_2.setText(robotid)
         self.s3.hide()
         #导航导览界面
-        self.s4 = QWidget()
-        self.ui4 = scene4.Ui_Form()
-        self.ui4.setupUi(self.s4)
-        self.ui4.pushButton.clicked.connect(self.BackToMain)
-        self.s4.hide()
+        # self.s4 = QWidget()
+        # self.ui4 = scene4.Ui_Form()
+        # self.ui4.setupUi(self.s4)
+        # self.ui4.pushButton.clicked.connect(self.BackToMain)
+        # self.s4.hide()
         # 确认重启提醒窗口
         self.s5 = QWidget()
         self.ui5 = reboot.Ui_Form()
@@ -89,9 +89,9 @@ class MainUI():
         self.getTalk = None
         # status状态信号
         self.status = "finished"
-        #对话框动画状态切换符号 0表示初始状态 1表示运动过一次 再次运动时切换为0
-        self.moveFlag = 0
-        #建立小键盘
+        # 对话框动画状态切换符号 0表示初始状态 1表示运动过一次 再次运动时切换为0
+        # self.moveFlag = 0
+        # 建立小键盘
         self.keyboard1 = KeyBoard()
         self.keyboard1.hide()
         self.keyboard1.signalShowText.connect(self.SpotidReciveKeyBoard)
@@ -121,10 +121,10 @@ class MainUI():
         self.s1.hide()
         timer2.stop()
 
-    #显示地图界面
-    def ShowMap(self):
-        self.s4.showFullScreen()
-        self.s0.hide()
+    # #显示地图界面
+    # def ShowMap(self):
+    #     self.s4.showFullScreen()
+    #     self.s0.hide()
 
     #返回主界面（从导航导览）
     def BackToMain(self):
@@ -195,6 +195,7 @@ class MainUI():
 
     #点击对话按钮事件   
     def StartTalk(self):
+        self.ui1.textBrowser.clear()
         if self.status == "recording":
             self.getTalk.Stop()
             print("trigger stop when recording")
@@ -213,12 +214,11 @@ class MainUI():
 
     #展示回答
     def ShowTheAnswer(self,txt):
-        self.ui1.textBrowser.setText(txt)
-        #self.Animation()
+            self.ui1.textBrowser.append(txt)
 
     #展示问题
     def ShowTheQuestion(self,txt):
-        self.ui1.textBrowser_2.setText(txt)
+           self.ui1.textBrowser.append(txt)
 
     #接受状态
     def GetTheStatus(self, status):
@@ -245,22 +245,6 @@ class MainUI():
 
     def RobotidReciveKeyBoard(self,str):
         self.ui3.lineEdit_2.setText(str)
-
-    def Animation(self):
-        if(self.moveFlag == 0):
-            animation = QPropertyAnimation(self.ui1.textBrowser, b'pos',self.s1)
-            # 2.设置属性值： 开始 插值 结束
-            animation.setStartValue(QPoint(0,0))  # 设置起始点
-            animation.setEndValue((QPoint(300, 300)))  # 设置终点
-            # 3.动画时长
-            animation.setDuration(3000)  # 时长单位毫秒
-            # 4.启东动画
-            animation.start()
-            self.moveFlag = 1
-        elif():
-            print("1")
-
-
 
 
 #主运行函数
