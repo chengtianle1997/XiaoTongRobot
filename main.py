@@ -196,21 +196,25 @@ class MainUI():
     #点击对话按钮事件   
     def StartTalk(self):
         self.ui1.textBrowser.clear()
+        # 终止录音（当在录音时）
         if self.status == "recording":
             self.getTalk.Stop()
             print("trigger stop when recording")
+        # 开始聊天（当无任务在进行时）
         elif self.status == "finished":
             self.talk_thread = get_talk.GetTalkThread(self.getTalk)
             self.talk_thread.questionSignal.connect(self.ShowTheQuestion)
             self.talk_thread.answerSignal.connect(self.ShowTheAnswer)
             self.talk_thread.statusSignal.connect(self.GetTheStatus)
             self.talk_thread.start()
+        # 终止播放音频（当在播放时）
+        elif self.status == "playing":
+            self.getTalk.Stop()
+            print("trigger stop when solving")
+            return
+        # 忽略请求（处理网络任务时）
         else:
             return
-        # elif self.status == "solving":
-        #     self.getTalk.Stop()
-        #     print("trigger stop when solving")
-        #     return
 
     #展示回答
     def ShowTheAnswer(self,txt):
@@ -222,13 +226,13 @@ class MainUI():
 
     #接受状态
     def GetTheStatus(self, status):
-        print(status)
+        print("MainUI get status:{}".format(status))
         self.status = status
-        if status == "finished":
-            try:
-                self.talk_thread.quit()
-            except Exception:
-                return
+        # if status == "finished":
+        #     try:
+        #         self.talk_thread.quit()
+        #     except Exception:
+        #         return
 
     #显示小键盘
     def KeyBoard1Event(self):

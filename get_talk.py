@@ -44,7 +44,7 @@ class GetTalk:
         if init_enable:
             self.InitAutoReply()
         # 状态表
-        self.status = ["recording", "solving", "finished"]
+        self.status = ["recording", "solving", "playing", "finished"]
         # 当前状态
         self.status_now = "finished"
         # 信号绑定
@@ -80,7 +80,7 @@ class GetTalk:
                 self.internalerr_sound()
             if self.debugger:
                 print("voice to txt error: code-{}, errmsg-{}".format(code, error_msg))
-            self.set_status(self.status[2])
+            self.set_status(self.status[3])
             return
         # 问题转回答
         # 空问题处理
@@ -88,7 +88,7 @@ class GetTalk:
             self.internalerr_sound()
             if self.debugger:
                 print("voice to txt error: get an empty input text")
-            self.set_status(self.status[2])
+            self.set_status(self.status[3])
             return
         code, answer = self.get_answer.get_answer(txt)
         self.set_answer_txt(answer)
@@ -100,7 +100,7 @@ class GetTalk:
                 self.internalerr_sound()
             if self.debugger:
                 print("get answer error: code-{}".format(code))
-            self.set_status(self.status[2])
+            self.set_status(self.status[3])
             return
         # 文字转语音
         answer += "。"
@@ -115,19 +115,20 @@ class GetTalk:
                 self.internalerr_sound()
             if self.debugger:
                 print("txt to voice eror: code-{}, errmsg-{}".format(code, error_msg))
-            self.set_status(self.status[2])
+            self.set_status(self.status[3])
             return
         # 播放语音
-        self.speaker.play("answer.mp3")
         self.set_status(self.status[2])
+        self.speaker.play("answer.mp3")
+        self.set_status(self.status[3])
     
     # 主功能函数：手动停止录音（若录音过程未结束）
     def Stop(self):
         if self.recording:
             self.recorder.stop()
-        elif self.status_now == self.status[1]:
+        elif self.status_now == self.status[2]:
             self.speaker.stop()
-            self.set_status(self.status[2])
+            self.set_status(self.status[3])
         return
 
     # 检查并加载预设定语音
@@ -182,6 +183,7 @@ class GetTalk:
         neterr_txt = config.get_config("autoreply", "networkerror" + str(n))
         self.set_answer_txt(neterr_txt)
         # _thread.start_new_thread(self.speaker.play, (file_url,))
+        self.set_status(self.status[2])
         self.speaker.play(file_url)
     
     # 播放内部错误提示音
@@ -191,6 +193,7 @@ class GetTalk:
         interr_txt = config.get_config("autoreply", "internalerror" + str(n))
         self.set_answer_txt(interr_txt)
         # _thread.start_new_thread(self.speaker.play, (file_url,))
+        self.set_status(self.status[2])
         self.speaker.play(file_url)
 
     # 播放唤醒音
