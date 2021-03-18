@@ -1,9 +1,11 @@
 [Desktop Entry]
 Name=XiaoTong
 Comment=XiaoTongChattingRobot
-Exec=bash /home/pi/Desktop/XiaoTongRobotTest/autostart.sh
+Exec=bash /home/pi/Desktop/XiaoTongRobot/autostart.sh
 Terminal=false
 MultipleArgs=false
 Type=Application
 Categories=Application;Development;
 StartupNotify=true
+Icon=/home/pi/Desktop/XiaoTongRobot/resources/logo.png
+Categories=Application
