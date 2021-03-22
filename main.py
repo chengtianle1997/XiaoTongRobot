@@ -20,6 +20,9 @@ import config
 #软键盘
 from keyBoard import KeyBoard
 
+#计时器
+import time
+
 #全局变量
 timer = QTimer()  #按钮长按计时器
 timer2 = QTimer() #页面重置计时器 
@@ -152,15 +155,19 @@ class MainUI():
         self.ui1.label.setMovie(self.recordingGif)
         self.recordingGif.start()
         self.ShowTheQuestion("你说，我在听……")
-
+        
     def SetSolvingView(self):
         self.ui1.label.hide()
         self.ui1.label_3.setMovie(self.solvingGif)
         self.solvingGif.start()
+        #清空对话框
+        self.ui1.textBrowser.clear()
         
     def SetInitFinishedView(self):
         self.ui1.label.hide()
         self.ui1.label_3.setPixmap(self.finished)
+        #清空对话框
+        self.ui1.textBrowser.clear()
         self.ShowTheQuestion("小主人你好呀，我是小童")
         self.ShowTheQuestion("点击下面那个魔幻的按钮开始和我聊天吧")
 
@@ -232,14 +239,14 @@ class MainUI():
 
     #点击对话按钮事件   
     def StartTalk(self):
-        #清空对话框
-        self.ui1.textBrowser.clear()
         # 终止录音（当在录音时）
         if self.status == "recording":
             self.getTalk.Stop()
             print("trigger stop when recording")
         # 开始聊天（当无任务在进行时）
         elif self.status == "finished":
+            #清空对话框
+            self.ui1.textBrowser.clear()
             #执行录音等任务
             self.talk_thread = get_talk.GetTalkThread(self.getTalk)
             self.talk_thread.questionSignal.connect(self.ShowTheQuestion)
