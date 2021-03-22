@@ -2,6 +2,7 @@ import sys, os
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtCore import QTimer, QThread
 from PyQt5 import QtGui, QtCore, QtWidgets
+from PyQt5.QtGui import QMovie, QPixmap
 from PyQt5.Qt import *
 
 #页面窗口
@@ -26,9 +27,14 @@ timer2 = QTimer() #页面重置计时器
 class MainUI(): 
     def __init__(self):
         #读取Config文件
-        spotid=config.get_spot_id()
-        robotid=config.get_robot_id()
-        qrcode=config.get_robot_qrcode()
+        spotid = config.get_spot_id()
+        robotid = config.get_robot_id()
+        qrcode = config.get_robot_qrcode()
+        title1 = config.get_config("DisplayText","title1")
+        title2 = config.get_config("DisplayText","title2")
+        welcome1 = config.get_config("DisplayText","welcome1")
+        welcome2 = config.get_config("DisplayText","welcome2")
+        welcome3 = config.get_config("DisplayText","welcome3")
         pix=QtGui.QPixmap(qrcode)
         #页面1：打开时的主界面
         self.s0 = QWidget()
@@ -36,14 +42,18 @@ class MainUI():
         self.ui0.setupUi(self.s0)
         self.ui0.label_2.setPixmap(pix)
         self.ui0.label_2.adjustSize
-        self.ui0.label_3.setText(robotid)
+        self.ui0.label_3.setText("ID:"+robotid)
+        self.ui0.label_4.setText("<font color = #ebebeb size = 70>"+title1+"<font>")
+        self.ui0.label_5.setText("<font color = #ebebeb size = 30>"+title2+"<font>")
+        self.ui0.textBrowser.append(welcome1+"\n")
+        self.ui0.textBrowser.append(welcome2+"\n")
+        self.ui0.textBrowser.append(welcome3)
         #页面1信号与槽
         self.ui0.label.button_clicked_signal.connect(self.OnAnywhereChicked)
         self.ui0.textBrowser.button_clicked_signal.connect(self.OnAnywhereChicked)
-        self.ui0.pushButton_2.clicked.connect(self.OnAnywhereChicked)
-        # self.ui0.pushButton_3.clicked.connect(self.ShowMap)
         self.ui0.pushButton.pressed.connect(self.On_pushButton_pressed)
         self.ui0.pushButton.released.connect(self.On_pushButton_release)
+        self.ui0.verticalSlider.valueChanged.connect(self.ChangeVolume2)
         self.s0.showFullScreen()
         #页面2：对话窗口界面
         self.s1 = QWidget()
@@ -53,7 +63,11 @@ class MainUI():
         self.ui1.pushButton_2.pressed.connect(self.On_pushButton_pressed)
         self.ui1.pushButton_2.released.connect(self.On_pushButton_release)
         self.ui1.label_3.button_clicked_signal.connect(self.StartTalk)
-        self.ui1.pushButton.clicked.connect(self.RefreshPage)
+        self.ui1.label.button_clicked_signal.connect(self.StartTalk)
+        self.ui1.label_2.button_clicked_signal.connect(self.RefreshPage)
+        self.ui1.horizontalSlider.valueChanged.connect(self.ChangeVolume)
+        self.ui1.label_4.button_clicked_signal.connect(self.SwitchVolume)
+        self.ui1.label.hide()
         self.s1.hide()
         #管理员界面
         self.s2 = QWidget()
@@ -72,12 +86,6 @@ class MainUI():
         self.ui3.lineEdit.setText(spotid)
         self.ui3.lineEdit_2.setText(robotid)
         self.s3.hide()
-        #导航导览界面
-        # self.s4 = QWidget()
-        # self.ui4 = scene4.Ui_Form()
-        # self.ui4.setupUi(self.s4)
-        # self.ui4.pushButton.clicked.connect(self.BackToMain)
-        # self.s4.hide()
         # 确认重启提醒窗口
         self.s5 = QWidget()
         self.ui5 = reboot.Ui_Form()
@@ -102,37 +110,62 @@ class MainUI():
         self.ui3.lineEdit_2.button_clicked_signal.connect(self.KeyBoard2Event)
         # 聊天线程
         self.talk_thread = None
+        #设置系统音量为最大
+        self.VolumeSwitch = 1 #音效开关 1为有声音 0为静音 
+        os.system("amixer set Master " + "100" + "%")
+        self.ui1.horizontalSlider.setValue(100)
+        self.ui0.verticalSlider.setValue(100)
 
+        #UI动画GIF
+        self.solvingGif = QMovie("img/solving.gif")
+        self.recordingGif = QMovie("img/recording.gif")
+        self.finished = QPixmap("img/finished.png")
         
     # 绑定GetTalk
     def bindGetTalk(self, getTalk):
         self.getTalk = getTalk
     
-    #鼠标任意按下触发事件
-    def OnAnywhereChicked(self):
+    # 鼠标任意按下触发事件
+    def OnAnywhereChicked(self, wake=False):
         self.s1.showFullScreen()
         self.s0.hide()
         timer2.timeout.connect(self.RefreshPage)
-        timer2.start(60000)
+        timer2.start(120000)
+        if(wake == False):
+            self.SetInitFinishedView()
 
-    #页面重置事件   
+    # 页面重置事件   
     def RefreshPage(self):
         self.s0.showFullScreen()
         self.s1.hide()
         timer2.stop()
 
-    # #显示地图界面
-    # def ShowMap(self):
-    #     self.s4.showFullScreen()
-    #     self.s0.hide()
+    # 根据状态设置按钮动画和文字
+    def SetFinishedView(self):
+        self.ui1.label.hide()
+        self.ui1.label_3.adjustSize()
+        self.ui1.label_3.setPixmap(self.finished)
+        
+    
+    def SetRecordingView(self):
+        self.ui1.label.show()
+        self.ui1.label.setMovie(self.recordingGif)
+        self.recordingGif.start()
+        self.ShowTheQuestion("你说，我在听……")
 
-    #返回主界面（从导航导览）
-    def BackToMain(self):
-        self.s0.showFullScreen()
-        self.s4.hide()
+    def SetSolvingView(self):
+        self.ui1.label.hide()
+        self.ui1.label_3.setMovie(self.solvingGif)
+        self.solvingGif.start()
+        
+    def SetInitFinishedView(self):
+        self.ui1.label.hide()
+        self.ui1.label_3.setPixmap(self.finished)
+        self.ShowTheQuestion("小主人你好呀，我是小童")
+        self.ShowTheQuestion("点击下面那个魔幻的按钮开始和我聊天吧")
 
 
-    #隐藏按钮的鼠标长按事件
+    # 隐藏按钮的鼠标长按事件
     def On_pushButton_pressed(self):
         timer.timeout.connect(self.PressEvent)
         timer.start(2000)
@@ -158,7 +191,7 @@ class MainUI():
         qrcode=config.get_robot_qrcode()
         pix=QtGui.QPixmap(qrcode)
         self.ui0.label_2.setPixmap(pix)
-        self.ui0.label_2.adjustSize
+        self.ui0.label_2.adjustSize()
         self.ui0.label_3.setText(robotid)
         self.ui3.lineEdit.setText(spotid)
         self.ui3.lineEdit_2.setText(robotid)
@@ -178,6 +211,10 @@ class MainUI():
         self.s0.close()
         self.s1.close()
         self.s2.close()
+        self.s3.close()
+        self.s5.close()
+        self.keyboard1.close()
+        self.keyboard2.close()
 
     #重启程序
     def Restart(self):
@@ -195,6 +232,7 @@ class MainUI():
 
     #点击对话按钮事件   
     def StartTalk(self):
+        #清空对话框
         self.ui1.textBrowser.clear()
         # 终止录音（当在录音时）
         if self.status == "recording":
@@ -202,6 +240,7 @@ class MainUI():
             print("trigger stop when recording")
         # 开始聊天（当无任务在进行时）
         elif self.status == "finished":
+            #执行录音等任务
             self.talk_thread = get_talk.GetTalkThread(self.getTalk)
             self.talk_thread.questionSignal.connect(self.ShowTheQuestion)
             self.talk_thread.answerSignal.connect(self.ShowTheAnswer)
@@ -218,11 +257,11 @@ class MainUI():
 
     #展示回答
     def ShowTheAnswer(self,txt):
-            self.ui1.textBrowser.append(txt)
+            self.ui1.textBrowser.append("<font color = 'white' size = 25>"+txt+"<font>")
 
     #展示问题
     def ShowTheQuestion(self,txt):
-           self.ui1.textBrowser.append(txt)
+           self.ui1.textBrowser.append("<font color = #969696 size = 25>"+txt+"<font>")
 
     #接受状态
     def GetTheStatus(self, status):
@@ -233,6 +272,23 @@ class MainUI():
         #         self.talk_thread.quit()
         #     except Exception:
         #         return
+
+        # 判断状态与按钮动画
+        if (status == "finished"):
+            # self.ui1.label_3.adjustSize()
+            # self.ui1.label_3.setPixmap(self.finished)
+            self.SetFinishedView()
+        elif(status == "recording"):
+            # self.ui1.label_3.setMovie(self.recordingGif)
+            # # self.recordingGif.setScaledSize(self.ui1.label_3.size())
+            # self.recordingGif.start()
+            self.SetRecordingView()
+        elif(status == "solving"):
+            # self.ui1.label_3.setMovie(self.solvingGif)
+            # # self.ui1.label_3.setMinimumHeight(self.ui1.label_3.width())
+            # # self.solvingGif.setScaledSize(self.ui1.label_3.size())
+            # self.solvingGif.start()
+            self.SetSolvingView()
 
     #显示小键盘
     def KeyBoard1Event(self):
@@ -250,6 +306,27 @@ class MainUI():
     def RobotidReciveKeyBoard(self,str):
         self.ui3.lineEdit_2.setText(str)
 
+    # 页面2改变音量
+    def ChangeVolume(self):
+        volume = self.ui1.horizontalSlider.value()
+        print(volume)
+        os.system("amixer set Master " + str(volume) + "%")
+
+    # 页面1改变音量
+    def ChangeVolume2(self):
+        volume = self.ui0.verticalSlider.value()
+        print(volume)
+        os.system("amixer set Master " + str(volume) + "%")
+
+    # 页面2静音按钮
+    def SwitchVolume(self):
+        if(self.VolumeSwitch == 1):
+            os.system("amixer set Master " + "0" + "%")
+            self.VolumeSwitch = 0
+        elif():
+            self.ChangeVolume()
+            self.VolumeSwitch = 1
+
 
 #主运行函数
 if __name__ == '__main__':
@@ -258,10 +335,3 @@ if __name__ == '__main__':
     getTalk = get_talk.GetTalk(init_enable=False, debugger=True)
     Main.bindGetTalk(getTalk)
     sys.exit(app.exec_())
-    
-
-
-
-
-        
-
