@@ -77,7 +77,7 @@ class Ui_Form(object):
         self.label.setAlignment(QtCore.Qt.AlignCenter)
         self.label.setObjectName("label")
         self.gridLayout.addWidget(self.label, 4, 0, 2, 1)
-        self.pushButton_3 = QtWidgets.QPushButton(Form)
+        self.pushButton_3 = MyQLabel(Form)
         self.pushButton_3.setObjectName("pushButton_3")
         self.gridLayout.addWidget(self.pushButton_3, 0, 3, 2, 1)
         self.verticalSlider = QtWidgets.QSlider(Form)
@@ -111,6 +111,12 @@ class Ui_Form(object):
         self.pushButton.setText(_translate("Form", "PushButton"))
         self.label_2.setText(_translate("Form", "TextLabel"))
         self.label_3.setText(_translate("Form", "TextLabel"))
+
+        self.textBrowser.setStyleSheet("QTextBrowser{border-width:0;border-style:outset}")
+
+        pix2=QtGui.QPixmap("img/volume_icon.png")
+        self.pushButton_3.adjustSize()
+        self.pushButton_3.setPixmap(pix2)
 
         pix=QtGui.QPixmap("img/logo.png")
         self.label.setPixmap(pix)

@@ -48,9 +48,11 @@ class MainUI():
         self.ui0.label_3.setText("ID:"+robotid)
         self.ui0.label_4.setText("<font color = #ebebeb size = 70>"+title1+"<font>")
         self.ui0.label_5.setText("<font color = #ebebeb size = 30>"+title2+"<font>")
-        self.ui0.textBrowser.append(welcome1+"\n")
-        self.ui0.textBrowser.append(welcome2+"\n")
-        self.ui0.textBrowser.append(welcome3)
+        self.ui0.textBrowser.append("<font color = #ebebeb size = 70>"+welcome1+"\n"+"<font>")
+        self.ui0.textBrowser.append("<font color = #ebebeb size = 70>"+welcome2+"\n"+"<font>")
+        self.ui0.textBrowser.append("<font color = #ebebeb size = 70>"+welcome3+"<font>")
+        self.ui0.textBrowser.setStyleSheet("background-image:url(img/text_icon.png)")
+        self.ui0.textBrowser.adjustSize()
         #页面1信号与槽
         self.ui0.label.button_clicked_signal.connect(self.OnAnywhereChicked)
         self.ui0.textBrowser.button_clicked_signal.connect(self.OnAnywhereChicked)
@@ -71,6 +73,8 @@ class MainUI():
         self.ui1.horizontalSlider.valueChanged.connect(self.ChangeVolume)
         self.ui1.label_4.button_clicked_signal.connect(self.SwitchVolume)
         self.ui1.label.hide()
+        self.ui1.horizontalSlider.hide()
+        # self.ui1.label.lower()
         self.s1.hide()
         #管理员界面
         self.s2 = QWidget()
@@ -146,18 +150,21 @@ class MainUI():
     # 根据状态设置按钮动画和文字
     def SetFinishedView(self):
         self.ui1.label.hide()
-        self.ui1.label_3.adjustSize()
+        self.ui1.label_3.show()
         self.ui1.label_3.setPixmap(self.finished)
+        self.ui1.label_3.adjustSize()
         
-    
+        
     def SetRecordingView(self):
         self.ui1.label.show()
+        self.ui1.label_3.hide()
         self.ui1.label.setMovie(self.recordingGif)
         self.recordingGif.start()
         self.ShowTheQuestion("你说，我在听……")
         
     def SetSolvingView(self):
         self.ui1.label.hide()
+        self.ui1.label_3.show()
         self.ui1.label_3.setMovie(self.solvingGif)
         self.solvingGif.start()
         #清空对话框
@@ -327,11 +334,17 @@ class MainUI():
 
     # 页面2静音按钮
     def SwitchVolume(self):
+        # if(self.VolumeSwitch == 1):
+        #     os.system("amixer set Master " + "0" + "%")
+        #     self.VolumeSwitch = 0
+        # elif():
+        #     self.ChangeVolume()
+        #     self.VolumeSwitch = 1
         if(self.VolumeSwitch == 1):
-            os.system("amixer set Master " + "0" + "%")
+            self.ui1.horizontalSlider.hide()
             self.VolumeSwitch = 0
-        elif():
-            self.ChangeVolume()
+        elif(self.VolumeSwitch == 0):
+            self.ui1.horizontalSlider.show()
             self.VolumeSwitch = 1
 
 
