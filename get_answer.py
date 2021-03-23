@@ -26,16 +26,18 @@ class TuringRobot:
         # self.AUTH_ID = "70e323b8cf9c1a5ce4970e6f14e45ce1"
         self.AUTH_ID = ''.join(random.sample(string.ascii_letters+string.digits, 32)).lower()
         # 地理位置信息，需根据ip或定位获取
-        # self.LAT = "39.938838"
-        # self.LNG = "116.368624"
-        self.LNG, self.LAT = get_location.GetLocationByIP()
-        self.LNG, self.LAT = str(self.LNG), str(self.LAT)
+        self.LAT = "39.938838"
+        self.LNG = "116.368624"
+        # self.LNG, self.LAT = get_location.GetLocationByIP()
+        # print("Current Location: {}, {}".format(self.LNG, self.LAT))
+        # self.LNG, self.LAT = str(self.LNG), str(self.LAT)
     
     # 请求头建立
     def buildHeader(self):
         curTime = str(int(time.time()))
         # param = "{\"result_level\":\""+RESULT_LEVEL+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"scene\":\""+SCENE+"\",\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\"}"
-        param = "{\"result_level\":\""+self.RESULT_LEVEL+"\",\"auth_id\":\""+self.AUTH_ID+"\",\"data_type\":\""+self.DATA_TYPE+"\",\"scene\":\""+self.SCENE+"\",\"lat\":\""+self.LAT+"\",\"lng\":\""+self.LNG+"\"}"
+        # param = "{\"result_level\":\""+self.RESULT_LEVEL+"\",\"auth_id\":\""+self.AUTH_ID+"\",\"data_type\":\""+self.DATA_TYPE+"\",\"scene\":\""+self.SCENE+"\",\"lat\":\""+self.LAT+"\",\"lng\":\""+self.LNG+"\"}"
+        param = "{\"result_level\":\""+self.RESULT_LEVEL+"\",\"auth_id\":\""+self.AUTH_ID+"\",\"data_type\":\""+self.DATA_TYPE+"\",\"scene\":\""+self.SCENE+"\"}"
         #使用个性化参数时参数格式如下：
         #param = "{\"result_level\":\""+RESULT_LEVEL+"\",\"auth_id\":\""+AUTH_ID+"\",\"data_type\":\""+DATA_TYPE+"\",\"sample_rate\":\""+SAMPLE_RATE+"\",\"scene\":\""+SCENE+"\",\"lat\":\""+LAT+"\",\"lng\":\""+LNG+"\",\"pers_param\":\""+PERS_PARAM+"\"}"
         param = bytes(param, encoding = "utf8")

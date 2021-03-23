@@ -22,17 +22,28 @@ def GetLocalIP():
 # 获取当前位置经纬度（基于IP地址的粗略定位，仅定位到城市）
 # 返回数据：（经度， 纬度）
 def GetLocationByIP():
-    response = urlopen("https://restapi.amap.com/v3/ip?key=24c1ffc0a6c3d2f1d06570335356875d&ip=" + GetIP())
-    js = json.load(response)
-    status = js['status']
-    if not status == '1':
-        print("error")
-    rect = js['rectangle']
-    cord_list = rect.split(';')
-    cord1_long = float(cord_list[0].split(',')[0])
-    cord1_lan = float(cord_list[0].split(',')[1])
-    cord2_long = float(cord_list[1].split(',')[0])
-    cord2_lan = float(cord_list[1].split(',')[1])
-    cord_cen_long = (cord1_long + cord2_long) / 2
-    cord_cen_lan = (cord1_lan + cord2_lan) / 2
-    return cord_cen_long, cord_cen_lan
+    try:
+        common_ip = GetIP()
+        print("IP address: {}".format(common_ip))
+        response = urlopen("https://restapi.amap.com/v3/ip?key=24c1ffc0a6c3d2f1d06570335356875d&ip=" + common_ip)
+        js = json.load(response)
+        status = js['status']
+        if not status == '1':
+            print("error")
+        rect = js['rectangle']
+        cord_list = rect.split(';')
+        cord1_long = float(cord_list[0].split(',')[0])
+        cord1_lan = float(cord_list[0].split(',')[1])
+        cord2_long = float(cord_list[1].split(',')[0])
+        cord2_lan = float(cord_list[1].split(',')[1])
+        cord_cen_long = (cord1_long + cord2_long) / 2
+        cord_cen_lan = (cord1_lan + cord2_lan) / 2
+        return cord_cen_long, cord_cen_lan
+    except Exception as e:
+        print("GetLocationByIP error: {}".format(e))
+        # 默认定位地址为常州
+        return 119.93939105, 31.755843275 
+
+# Test Demo
+if __name__ == '__main__': 
+    print(GetLocationByIP())
