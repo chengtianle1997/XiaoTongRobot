@@ -57,6 +57,7 @@ class MainUI():
         self.ui0.label_9.adjustSize()
         self.ui0.label_10.setText("<font color = #ebebeb >"+welcome3+"<font>")
         self.ui0.label_10.adjustSize()
+        self.ui0.verticalSlider.hide()
         # self.ui0.textBrowser.adjustSize()
         #页面1信号与槽
         self.ui0.label.button_clicked_signal.connect(self.OnAnywhereChicked)
@@ -64,6 +65,7 @@ class MainUI():
         self.ui0.pushButton.pressed.connect(self.On_pushButton_pressed)
         self.ui0.pushButton.released.connect(self.On_pushButton_release)
         self.ui0.verticalSlider.valueChanged.connect(self.ChangeVolume2)
+        self.ui0.label_6.button_clicked_signal.connect(self.SwitchVolume2)
         self.s0.showFullScreen()
         #页面2：对话窗口界面
         self.s1 = QWidget()
@@ -123,11 +125,11 @@ class MainUI():
         # 聊天线程
         self.talk_thread = None
         #设置系统音量为最大
-        self.VolumeSwitch = 0 #音效控件开关 1为展示 0为隐藏 
+        self.VolumeSwitch = 0 #音效控件开关 1为展示 0为隐藏  页面2
+        self.VolumeSwitch2 = 0 #音效控件开关 1为展示 0为隐藏 页面1
         os.system("amixer set Master " + "100" + "%")
         self.ui1.horizontalSlider.setValue(100)
         self.ui0.verticalSlider.setValue(100)
-
         #UI动画GIF
         self.solvingGif = QMovie("img/solving.gif")
         self.recordingGif = QMovie("img/recording.gif")
@@ -211,9 +213,12 @@ class MainUI():
         pix=QtGui.QPixmap(qrcode)
         self.ui0.label_2.setPixmap(pix)
         self.ui0.label_2.adjustSize()
-        self.ui0.label_3.setText(robotid)
+        self.ui0.label_3.setText("<font color = #ebebeb >"+"ID:"+robotid+"<font>")
+        self.ui0.label_3.adjustSize()
         self.ui3.lineEdit.setText(spotid)
         self.ui3.lineEdit_2.setText(robotid)
+        self.keyboard1.hide()
+        self.keyboard2.hide()
 
     def ShowReboot(self):
         self.s5.setWindowFlags(QtCore.Qt.WindowStaysOnTopHint)
@@ -351,6 +356,14 @@ class MainUI():
         elif(self.VolumeSwitch == 0):
             self.ui1.horizontalSlider.show()
             self.VolumeSwitch = 1
+
+    def SwitchVolume2(self):
+        if(self.VolumeSwitch2 == 1):
+            self.ui0.verticalSlider.hide()
+            self.VolumeSwitch2 = 0
+        elif(self.VolumeSwitch2 == 0):
+            self.ui0.verticalSlider.show()
+            self.VolumeSwitch2 = 1
 
 
 #主运行函数
