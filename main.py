@@ -45,17 +45,26 @@ class MainUI():
         self.ui0.setupUi(self.s0)
         self.ui0.label_2.setPixmap(pix)
         self.ui0.label_2.adjustSize
-        self.ui0.label_3.setText("ID:"+robotid)
-        self.ui0.label_4.setText("<font color = #ebebeb size = 70>"+title1+"<font>")
-        self.ui0.label_5.setText("<font color = #ebebeb size = 30>"+title2+"<font>")
-        self.ui0.textBrowser.append("<font color = #ebebeb size = 70>"+welcome1+"\n"+"<font>")
-        self.ui0.textBrowser.append("<font color = #ebebeb size = 70>"+welcome2+"\n"+"<font>")
-        self.ui0.textBrowser.append("<font color = #ebebeb size = 70>"+welcome3+"<font>")
-        self.ui0.textBrowser.setStyleSheet("background-image:url(img/text_icon.png)")
-        self.ui0.textBrowser.adjustSize()
+        self.ui0.label_3.setText("<font color = #ebebeb>"+"ID:"+robotid+"<font>")
+        self.ui0.label_3.adjustSize()
+        self.ui0.label_4.setText("<font color = #ebebeb size = 10>"+title1+"<font>")
+        self.ui0.label_4.adjustSize()
+        self.ui0.label_5.setText("<font color = #ebebeb size = 10>"+title2+"<font>")
+        self.ui0.label_5.adjustSize()
+        
+        self.ui0.label_8.setText("<font color = #ebebeb size = 30>"+welcome1+"<font>")
+        self.ui0.label_8.setStyleSheet('background-color:#838383')
+        self.ui0.label_8.raise_()
+
+        self.ui0.label_8.adjustSize()
+        self.ui0.label_9.setText("<font color = #ebebeb size = 30>"+welcome2+"<font>")
+        self.ui0.label_9.adjustSize()
+        self.ui0.label_10.setText("<font color = #ebebeb size = 30>"+welcome3+"<font>")
+        self.ui0.label_10.adjustSize()
+        # self.ui0.textBrowser.adjustSize()
         #页面1信号与槽
         self.ui0.label.button_clicked_signal.connect(self.OnAnywhereChicked)
-        self.ui0.textBrowser.button_clicked_signal.connect(self.OnAnywhereChicked)
+        self.ui0.label_7.button_clicked_signal.connect(self.OnAnywhereChicked)
         self.ui0.pushButton.pressed.connect(self.On_pushButton_pressed)
         self.ui0.pushButton.released.connect(self.On_pushButton_release)
         self.ui0.verticalSlider.valueChanged.connect(self.ChangeVolume2)
@@ -118,7 +127,7 @@ class MainUI():
         # 聊天线程
         self.talk_thread = None
         #设置系统音量为最大
-        self.VolumeSwitch = 1 #音效开关 1为有声音 0为静音 
+        self.VolumeSwitch = 0 #音效控件开关 1为展示 0为隐藏 
         os.system("amixer set Master " + "100" + "%")
         self.ui1.horizontalSlider.setValue(100)
         self.ui0.verticalSlider.setValue(100)

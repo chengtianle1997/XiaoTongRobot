@@ -95,6 +95,7 @@ class Ui_Form(object):
         # self.label.lower()
         # self.gif.start()
 
+
         # 通过设置不透明度，隐藏管理员按钮
         op = QtWidgets.QGraphicsOpacityEffect()
         # 设置透明度的值，0.0到1.0，最小值0是透明，1是不透明
