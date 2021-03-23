@@ -53,7 +53,6 @@ class MainUI():
         self.ui0.label_5.adjustSize()
         
         self.ui0.label_8.setText("<font color = #ebebeb size = 30>"+welcome1+"<font>")
-        self.ui0.label_8.setStyleSheet('background-color:#838383')
         self.ui0.label_8.raise_()
 
         self.ui0.label_8.adjustSize()

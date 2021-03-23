@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPalette
+from PyQt5.QtGui import QPalette, QBrush, QPixmap
 
 #自定义带按键功能的label
 class MyQLabel(QtWidgets.QLabel):
@@ -45,7 +45,10 @@ class MyQTextBrowser(QtWidgets.QTextBrowser):
 
 class Ui_Form(object):
     def setupUi(self, Form):
-        Form.setStyleSheet("background-image:url(img/background.png)")
+        # Form.setStyleSheet("background-image:url(img/background.png)")
+        palette = QPalette()
+        palette.setBrush(QPalette.Background,QBrush(QPixmap("img/background.png")))
+        Form.setPalette(palette)
         Form.setObjectName("Form")
         Form.resize(800, 480)
         self.label_5 = QtWidgets.QLabel(Form)
