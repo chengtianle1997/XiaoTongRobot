@@ -51,10 +51,7 @@ class MainUI():
         self.ui0.label_4.adjustSize()
         self.ui0.label_5.setText("<font color = #ebebeb size = 10>"+title2+"<font>")
         self.ui0.label_5.adjustSize()
-        
         self.ui0.label_8.setText("<font color = #ebebeb size = 30>"+welcome1+"<font>")
-        self.ui0.label_8.raise_()
-
         self.ui0.label_8.adjustSize()
         self.ui0.label_9.setText("<font color = #ebebeb size = 30>"+welcome2+"<font>")
         self.ui0.label_9.adjustSize()
