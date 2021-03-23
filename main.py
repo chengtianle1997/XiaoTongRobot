@@ -45,17 +45,17 @@ class MainUI():
         self.ui0.setupUi(self.s0)
         self.ui0.label_2.setPixmap(pix)
         self.ui0.label_2.adjustSize
-        self.ui0.label_3.setText("<font color = #ebebeb>"+"ID:"+robotid+"<font>")
+        self.ui0.label_3.setText("<font color = #ebebeb >"+"ID:"+robotid+"<font>")
         self.ui0.label_3.adjustSize()
-        self.ui0.label_4.setText("<font color = #ebebeb size = 10>"+title1+"<font>")
+        self.ui0.label_4.setText("<font color = #ebebeb >"+title1+"<font>")
         self.ui0.label_4.adjustSize()
-        self.ui0.label_5.setText("<font color = #ebebeb size = 10>"+title2+"<font>")
+        self.ui0.label_5.setText("<font color = #ebebeb >"+title2+"<font>")
         self.ui0.label_5.adjustSize()
-        self.ui0.label_8.setText("<font color = #ebebeb size = 30>"+welcome1+"<font>")
+        self.ui0.label_8.setText("<font color = #ebebeb >"+welcome1+"<font>")
         self.ui0.label_8.adjustSize()
-        self.ui0.label_9.setText("<font color = #ebebeb size = 30>"+welcome2+"<font>")
+        self.ui0.label_9.setText("<font color = #ebebeb >"+welcome2+"<font>")
         self.ui0.label_9.adjustSize()
-        self.ui0.label_10.setText("<font color = #ebebeb size = 30>"+welcome3+"<font>")
+        self.ui0.label_10.setText("<font color = #ebebeb >"+welcome3+"<font>")
         self.ui0.label_10.adjustSize()
         # self.ui0.textBrowser.adjustSize()
         #页面1信号与槽
@@ -276,11 +276,11 @@ class MainUI():
 
     #展示回答
     def ShowTheAnswer(self,txt):
-            self.ui1.textBrowser.append("<font color = 'white' size = 25>"+txt+"<font>")
+            self.ui1.textBrowser.append("<font color = 'white'>"+txt+"<font>")
 
     #展示问题
     def ShowTheQuestion(self,txt):
-           self.ui1.textBrowser.append("<font color = #969696 size = 25>"+txt+"<font>")
+           self.ui1.textBrowser.append("<font color = #969696>"+txt+"<font>")
 
     #接受状态
     def GetTheStatus(self, status):
