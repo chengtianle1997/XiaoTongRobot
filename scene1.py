@@ -44,7 +44,7 @@ class Ui_Form(object):
         self.textBrowser = QtWidgets.QTextBrowser(Form)
         self.textBrowser.setGeometry(QtCore.QRect(60, 70, 671, 261))
         font = QtGui.QFont()
-        font.setPointSize(30)
+        font.setPointSize(24)
         self.textBrowser.setFont(font)
         self.textBrowser.setObjectName("textBrowser")
         self.label = MyQLabel(Form)
