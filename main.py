@@ -60,8 +60,8 @@ class MainUI():
         self.ui0.verticalSlider.hide()
         # self.ui0.textBrowser.adjustSize()
         #页面1信号与槽
-        self.ui0.label.button_clicked_signal.connect(self.OnAnywhereChicked)
-        self.ui0.label_7.button_clicked_signal.connect(self.OnAnywhereChicked)
+        self.ui0.label.button_clicked_signal.connect(self.OnAnywhereClicked)
+        self.ui0.label_7.button_clicked_signal.connect(self.OnAnywhereClicked)
         self.ui0.pushButton.pressed.connect(self.On_pushButton_pressed)
         self.ui0.pushButton.released.connect(self.On_pushButton_release)
         self.ui0.verticalSlider.valueChanged.connect(self.ChangeVolume2)
@@ -140,7 +140,7 @@ class MainUI():
         self.getTalk = getTalk
     
     # 鼠标任意按下触发事件
-    def OnAnywhereChicked(self, wake=False):
+    def OnAnywhereClicked(self, wake=False):
         self.s1.showFullScreen()
         self.s0.hide()
         timer2.timeout.connect(self.RefreshPage)
