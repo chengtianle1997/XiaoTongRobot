@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPalette, QBrush, QPixmap
+from PyQt5.QtGui import QPalette, QBrush, QPixmap, QCursor
 
 #自定义带按键功能的label
 class MyQLabel(QtWidgets.QLabel):
@@ -51,6 +51,10 @@ class Ui_Form(object):
         Form.setPalette(palette)
         Form.setObjectName("Form")
         Form.resize(800, 480)
+        pixmap = QtGui.QPixmap('img/touch_cursor.png')
+        cursor = QCursor(pixmap)
+        Form.setCursor(cursor)
+
         self.label_5 = QtWidgets.QLabel(Form)
         self.label_5.setGeometry(QtCore.QRect(210, 150, 280, 35))
         font = QtGui.QFont()
@@ -60,6 +64,9 @@ class Ui_Form(object):
         self.label_3 = QtWidgets.QLabel(Form)
         self.label_3.setGeometry(QtCore.QRect(605, 200, 16, 16))
         self.label_3.setAlignment(QtCore.Qt.AlignCenter)
+        font = QtGui.QFont()
+        font.setPointSize(9)
+        self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.label_4 = QtWidgets.QLabel(Form)
         self.label_4.setGeometry(QtCore.QRect(20, 50, 480, 48))

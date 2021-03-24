@@ -2,7 +2,7 @@ import sys, os
 from PyQt5.QtWidgets import QApplication, QWidget
 from PyQt5.QtCore import QTimer, QThread
 from PyQt5 import QtGui, QtCore, QtWidgets
-from PyQt5.QtGui import QMovie, QPixmap
+from PyQt5.QtGui import QMovie, QPixmap, QCursor
 from PyQt5.Qt import *
 
 #页面窗口
@@ -10,7 +10,7 @@ import scene0 #初始页面s0
 import scene1 #显示对话窗口的页面s1
 import scene2 #管理员窗口s2
 import scene3 #修改配置界面s3
-import scene4 #导航导览页面s4
+# import scene4 #导航导览页面s4
 import reboot #确认重启提醒窗口
 
 #语音功能

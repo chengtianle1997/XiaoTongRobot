@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtGui import QMovie
+from PyQt5.QtGui import QMovie, QCursor, QPalette, QBrush, QPixmap
 
 #自定义带按键功能的label
 class MyQLabel(QtWidgets.QLabel):
@@ -29,8 +29,15 @@ class MyQLabel(QtWidgets.QLabel):
 class Ui_Form(object):
     def setupUi(self, Form):
         Form.setStyleSheet("background-image:url(img/background.png)")
+        # palette = QPalette()
+        # palette.setBrush(QPalette.Background,QBrush(QPixmap("img/background.png")))
+        # Form.setPalette(palette)
         Form.setObjectName("Form")
+        pixmap = QtGui.QPixmap('img/touch_cursor.png')
+        cursor = QCursor(pixmap)
+        Form.setCursor(cursor)
         Form.resize(800, 480)
+
         self.label_2 = MyQLabel(Form)
         self.label_2.setGeometry(QtCore.QRect(10, 10, 50, 48))
         self.label_2.setObjectName("label_2")
@@ -43,6 +50,7 @@ class Ui_Form(object):
         self.label_4.setObjectName("label_4")
         self.textBrowser = QtWidgets.QTextBrowser(Form)
         self.textBrowser.setGeometry(QtCore.QRect(60, 70, 671, 261))
+        self.textBrowser.viewport().setCursor(cursor)
         font = QtGui.QFont()
         font.setPointSize(24)
         self.textBrowser.setFont(font)
@@ -97,7 +105,6 @@ class Ui_Form(object):
         # self.label.adjustSize()
         # self.label.lower()
         # self.gif.start()
-
 
         # 通过设置不透明度，隐藏管理员按钮
         op = QtWidgets.QGraphicsOpacityEffect()
