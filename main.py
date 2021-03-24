@@ -26,6 +26,8 @@ import time
 #全局变量
 timer = QTimer()  #按钮长按计时器
 timer2 = QTimer() #页面重置计时器 
+timer3 = QTimer() #音量控制显隐计时器
+
 
 class MainUI(): 
     def __init__(self):
@@ -141,7 +143,10 @@ class MainUI():
     
     # 鼠标任意按下触发事件
     def OnAnywhereClicked(self, wake=False):
+        pixmap = QtGui.QPixmap('img/touch_cursor.png')
+        cursor = QCursor(pixmap)
         self.s1.showFullScreen()
+        self.ui1.textBrowser.viewport().setCursor(cursor)
         self.s0.hide()
         timer2.timeout.connect(self.RefreshPage)
         timer2.start(120000)
@@ -168,6 +173,8 @@ class MainUI():
         self.ui1.label.setMovie(self.recordingGif)
         self.recordingGif.start()
         self.ShowTheQuestion("你说，我在听……")
+        timer2.stop()
+        timer2.start()
         
     def SetSolvingView(self):
         self.ui1.label.hide()
@@ -353,17 +360,32 @@ class MainUI():
         if(self.VolumeSwitch == 1):
             self.ui1.horizontalSlider.hide()
             self.VolumeSwitch = 0
+            timer3.stop()
         elif(self.VolumeSwitch == 0):
             self.ui1.horizontalSlider.show()
             self.VolumeSwitch = 1
+            timer3.timeout.connect(self.HideVolume)
+            timer3.start(15000)
+
 
     def SwitchVolume2(self):
         if(self.VolumeSwitch2 == 1):
             self.ui0.verticalSlider.hide()
             self.VolumeSwitch2 = 0
+            timer3.stop()
         elif(self.VolumeSwitch2 == 0):
             self.ui0.verticalSlider.show()
             self.VolumeSwitch2 = 1
+            timer3.timeout.connect(self.HideVolume)
+            timer3.start(15000)
+
+    def HideVolume(self):
+            self.ui0.verticalSlider.hide()
+            self.VolumeSwitch2 = 0
+            self.ui1.horizontalSlider.hide()
+            self.VolumeSwitch = 0
+            timer3.stop()
+
 
 
 #主运行函数
