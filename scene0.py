@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPalette, QBrush, QPixmap, QCursor
+from PyQt5.QtGui import QPalette, QBrush, QPixmap, QCursor, QMovie
 
 #自定义带按键功能的label
 class MyQLabel(QtWidgets.QLabel):
@@ -138,16 +138,23 @@ class Ui_Form(object):
         self.label_6.setPixmap(pix2)
         self.label_6.adjustSize()
         
-        pix=QtGui.QPixmap("img/logo.png")
-        self.label.setPixmap(pix)
-        self.label.setGeometry(self.label.x(),self.label.y(),158,158)
-        self.label.setScaledContents(True)
+        # pix=QtGui.QPixmap("img/logo.png")
+        # self.label.setPixmap(pix)
+        # self.label.setGeometry(self.label.x(),self.label.y(),158,158)
+        # self.label.setScaledContents(True)
 
         #通过设置不透明度，隐藏管理员按钮
         op = QtWidgets.QGraphicsOpacityEffect()
         # 设置透明度的值，0.0到1.0，最小值0是透明，1是不透明
         op.setOpacity(0)
         self.pushButton.setGraphicsEffect(op)
+
+        self.LogoGif = QMovie("img/Logo.gif")
+        self.label.setMovie(self.LogoGif)
+        self.label.setGeometry(self.label.x()-15,self.label.y()-10,180,180)
+        # self.label.setScaledContents(True)
+        # self.label.adjustSize()
+        self.LogoGif.start()
 
         # pe = QPalette()
         # pe.setColor(QPalette.WindowText,Qt.red)#设置字体颜色
