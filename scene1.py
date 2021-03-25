@@ -111,3 +111,41 @@ class Ui_Form(object):
         # 设置透明度的值，0.0到1.0，最小值0是透明，1是不透明
         op.setOpacity(0)
         self.pushButton_2.setGraphicsEffect(op)
+
+        # 滑块样式
+        self.horizontalSlider.setStyleSheet("QSlider::groove{\n"
+"border: 1px solid #909090; /* 边框颜色 */"
+
+"height: 10px; /* 整体高度 */"
+
+"margin: 0px 0;}"
+"QSlider::handle{\n"
+"\n"
+"border: 1px solid #5c5c5c; /*边框*/\n"
+"\n"
+"width:10px;\n"
+"\n"
+"margin: -8px 0; /*滑块大小设置*/\n"
+"\n"
+"border-radius: 2px; /* 圆角设置 */\n"
+"\n"
+"background-color: #FFFFFF;\n"
+"\n"
+"}\n"
+"\n"
+"/* 已划过的设置*/\n"
+"\n"
+"QSlider::sub-page:horiziontal\n"
+"\n"
+"{\n"
+"border: 1px solid #000000; /* 边框颜色 */\n"
+"\n"
+"background:#67B1F6; /* 颜色渐变*/\n"
+"\n"
+"border-radius: 3px;\n"
+"\n"
+"height: 3px; /* 整体高度 */\n"
+"\n"
+"}\n"
+"\n"
+"")

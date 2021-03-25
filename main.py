@@ -129,6 +129,7 @@ class MainUI():
         #设置系统音量为最大
         self.VolumeSwitch = 0 #音效控件开关 1为展示 0为隐藏  页面2
         self.VolumeSwitch2 = 0 #音效控件开关 1为展示 0为隐藏 页面1
+        timer3.timeout.connect(self.HideVolume)
         os.system("amixer set Master " + "100" + "%")
         self.ui1.horizontalSlider.setValue(100)
         self.ui0.verticalSlider.setValue(100)
@@ -342,12 +343,21 @@ class MainUI():
         volume = self.ui1.horizontalSlider.value()
         print(volume)
         os.system("amixer set Master " + str(volume) + "%")
+        # 触发音量调节后鼠标靠近textbroswer也会变形
+        pixmap = QtGui.QPixmap('img/touch_cursor.png')
+        cursor = QCursor(pixmap)
+        self.ui1.textBrowser.viewport().setCursor(cursor)
+        timer3.stop()
+        timer3.start(15000)
+        
 
     # 页面1改变音量
     def ChangeVolume2(self):
         volume = self.ui0.verticalSlider.value()
         print(volume)
         os.system("amixer set Master " + str(volume) + "%")
+        timer3.stop()
+        timer3.start(15000)
 
     # 页面2静音按钮
     def SwitchVolume(self):
@@ -364,9 +374,9 @@ class MainUI():
         elif(self.VolumeSwitch == 0):
             self.ui1.horizontalSlider.show()
             self.VolumeSwitch = 1
-            timer3.timeout.connect(self.HideVolume)
+            timer3.stop()
             timer3.start(15000)
-
+        
 
     def SwitchVolume2(self):
         if(self.VolumeSwitch2 == 1):
@@ -376,7 +386,7 @@ class MainUI():
         elif(self.VolumeSwitch2 == 0):
             self.ui0.verticalSlider.show()
             self.VolumeSwitch2 = 1
-            timer3.timeout.connect(self.HideVolume)
+            timer3.stop()
             timer3.start(15000)
 
     def HideVolume(self):

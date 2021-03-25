@@ -155,4 +155,44 @@ class Ui_Form(object):
         # pe.setColor(QPalette.Window,Qt.red)#设置背景颜色
         # #pe.setColor(QPalette.Background,Qt.blue)<span style="font-family: Arial, Helvetica, sans-serif;">#设置背景颜色，和上面一行的效果一样
         # self.label_8.setPalette(pe)
-        self.label_8.raise_()
+
+        self.verticalSlider.setStyleSheet("QSlider::groove:vertical{\n"
+"border: 1px solid #909090; /* 边框颜色 */"
+
+"width: 10px; /* 整体宽度 */"
+
+"margin: 0px 0;}"
+"QSlider::handle{\n"
+"\n"
+"border: 1px solid #5c5c5c; /*边框*/\n"
+"\n"
+"height:10px;\n"
+"\n"
+"width:10px;\n"
+"\n"
+"margin: -2px -6px; /*滑块大小设置*/\n"
+"\n"
+"border-radius: 2px; /* 圆角设置 */\n"
+"\n"
+"background-color: #FFFFFF;\n"
+"\n"
+"}\n"
+"\n"
+"/* 已划过的设置*/\n"
+"\n"
+"QSlider::add-page:vertical\n"
+"\n"
+"{\n"
+"border: 1px solid #000000; /* 边框颜色 */\n"
+"\n"
+"background:#67B1F6; /* 颜色渐变*/\n"
+"\n"
+"border-radius: 3px;\n"
+"\n"
+"height: 3px; /* 整体高度 */\n"
+"\n"
+"}\n"
+"\n"
+"")
+        
+        
