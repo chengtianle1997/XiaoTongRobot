@@ -46,7 +46,7 @@ class MainUI():
         self.ui0 = scene0.Ui_Form()
         self.ui0.setupUi(self.s0)
         self.ui0.label_2.setPixmap(pix)
-        self.ui0.label_2.adjustSize
+        # self.ui0.label_2.adjustSize()
         self.ui0.label_3.setText("<font color = #ebebeb >"+"ID:"+robotid+"<font>")
         self.ui0.label_3.adjustSize()
         self.ui0.label_4.setText("<font color = #ebebeb >"+title1+"<font>")
@@ -220,7 +220,7 @@ class MainUI():
         qrcode=config.get_robot_qrcode()
         pix=QtGui.QPixmap(qrcode)
         self.ui0.label_2.setPixmap(pix)
-        self.ui0.label_2.adjustSize()
+        # self.ui0.label_2.adjustSize()
         self.ui0.label_3.setText("<font color = #ebebeb >"+"ID:"+robotid+"<font>")
         self.ui0.label_3.adjustSize()
         self.ui3.lineEdit.setText(spotid)
