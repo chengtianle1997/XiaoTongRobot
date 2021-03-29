@@ -150,12 +150,16 @@ class MainUI():
         self.ui1.textBrowser.viewport().setCursor(cursor)
         self.s0.hide()
         timer2.timeout.connect(self.RefreshPage)
-        timer2.start(120000)
+        timer2.start(60000)
+        volume = self.ui0.verticalSlider.value()
+        self.ui1.horizontalSlider.setValue(volume)
         if(wake == False):
             self.SetInitFinishedView()
 
     # 页面重置事件   
     def RefreshPage(self):
+        volume = self.ui1.horizontalSlider.value()
+        self.ui0.verticalSlider.setValue(volume)
         self.s0.showFullScreen()
         self.s1.hide()
         timer2.stop()
@@ -264,6 +268,8 @@ class MainUI():
 
     #点击对话按钮事件   
     def StartTalk(self):
+        timer2.stop()
+        timer2.start(60000)
         # 终止录音（当在录音时）
         if self.status == "recording":
             self.getTalk.Stop()
